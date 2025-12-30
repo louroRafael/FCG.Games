@@ -25,6 +25,18 @@ public class GameService(IGameRepository repository) : IGameService
 
     public async Task<Result<List<GameResponse>>> ListAsync()
     {
-        throw new NotImplementedException();
+        var games = await repository.GetAllAsync();
+
+        return Result<List<GameResponse>>.Ok(
+            games.Select(x => new GameResponse(
+                x.Id,
+                x.Title,
+                x.Description,
+                Enum.Parse<GameGenre>(x.Genre, true),
+                Enum.Parse<GamePlatform>(x.Platform, true),
+                x.Developer,
+                x.Price
+            )).ToList()
+        );
     }
 }

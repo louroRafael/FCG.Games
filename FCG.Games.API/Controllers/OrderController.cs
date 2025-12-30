@@ -28,14 +28,14 @@ public class OrderController(IOrderService service) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var order = await service.GetByIdAsync(id);
         return order.ToActionResult();
     }
 
     [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetByUserId(int userId)
+    public async Task<IActionResult> GetByUserId(Guid userId)
     {
         var orders = await service.GetByUserIdAsync(userId);
         return orders.ToActionResult();

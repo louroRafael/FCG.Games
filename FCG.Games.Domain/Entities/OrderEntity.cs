@@ -15,10 +15,12 @@ public class OrderEntity : EntityBase, IAggregateRoot
 
     public OrderEntity() { }
 
-    public OrderEntity(Guid userId, IEnumerable<Guid> gamesIds)
+    public OrderEntity(Guid userId, IEnumerable<Guid> gamesIds, decimal totalAmount, PaymentMethod paymentMethod)
     {
         UserId = userId;
         Status = OrderStatus.InProcess.ToString();
+        TotalAmount = totalAmount;
+        PaymentMethod = paymentMethod.ToString();
 
         foreach (var gameId in gamesIds)
         {

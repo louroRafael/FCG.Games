@@ -8,6 +8,6 @@ public interface IOrderService
 {
     Task<Result<OrderResponse>> CreateAsync(CreateOrderRequest request);
     Task<Result<List<OrderResponse>>> ListAsync();
-    Task<Result<OrderResponse?>> GetByIdAsync(int id);
-    Task<Result<List<OrderResponse>>> GetByUserIdAsync(int userId);
+    Task<Result<OrderResponse?>> GetByIdAsync(Guid id);
+    Task<Result<List<OrderResponse>>> GetByUserIdAsync(Guid userId);
 }
