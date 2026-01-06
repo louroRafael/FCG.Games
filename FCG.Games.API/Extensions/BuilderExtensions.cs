@@ -55,7 +55,7 @@ namespace FCG.Games.API.Extensions
 
             builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(keysDirectory)
-                .SetApplicationName("FCG.Users");
+                .SetApplicationName("FCG.Games");
 
             builder.Configuration
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -114,7 +114,7 @@ namespace FCG.Games.API.Extensions
                 {
                     Title = "FCG.Games.API",
                     Version = "v1",
-                    Description = "Web API ASP.NET Core - Microserviço de Usuários",
+                    Description = "Web API ASP.NET Core - Microserviço de Jogos",
                 });
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
