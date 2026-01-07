@@ -28,6 +28,7 @@ public class OrderService(IOrderRepository repository, IGameRepository gameRepos
         }
 
         var order = new OrderEntity(request.UserId, request.GameIds, totalAmount, request.PaymentMethod);
+
         await repository.AddAsync(order);
 
         Enum.TryParse<PaymentMethod>(order.PaymentMethod, true, out var paymentMethod);

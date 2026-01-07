@@ -22,6 +22,11 @@ public class OrderEntity : EntityBase, IAggregateRoot
         TotalAmount = totalAmount;
         PaymentMethod = paymentMethod.ToString();
 
+        var date = DateTime.UtcNow.ToString("yyyyMMdd");
+        var guid = Guid.NewGuid().ToString("N")[..6].ToUpper();
+
+        OrderNumber = $"ORD-{date}-{guid}";
+
         foreach (var gameId in gamesIds)
         {
             Items.Add(new OrderItemEntity(Id, gameId));
