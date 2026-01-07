@@ -21,9 +21,9 @@ public class OrderController(IOrderService service) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List(CancellationToken ct)
     {
-        var orders = await service.ListAsync();
+        var orders = await service.ListAsync(ct);
         return orders.ToActionResult();
     }
 

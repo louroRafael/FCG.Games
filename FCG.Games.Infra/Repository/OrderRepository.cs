@@ -19,4 +19,12 @@ public class OrderRepository : RepositoryBase<OrderEntity>, IOrderRepository
             .Where(o => o.UserId == userId)
             .ToListAsync();
     }
+
+    public async Task<List<OrderEntity>> GetAllWithItems(CancellationToken ct = default)
+    {
+        return await _dbSet
+                .AsNoTracking()
+                .Include(o => o.Items)
+                .ToListAsync(ct);
+    }
 }

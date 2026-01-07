@@ -68,9 +68,9 @@ public class OrderService(IOrderRepository repository, IGameRepository gameRepos
         );
     }
 
-    public async Task<Result<List<OrderResponse>>> ListAsync()
+    public async Task<Result<List<OrderResponse>>> ListAsync(CancellationToken ct)
     {
-        var orders = await repository.GetAllAsync();
+        var orders = await repository.GetAllWithItems(ct);
 
         if (orders == null || orders.Count == 0)
             return Result<List<OrderResponse>>.Fail(ErrorFactory.NotFound("Não existe nenhum pedido."));
