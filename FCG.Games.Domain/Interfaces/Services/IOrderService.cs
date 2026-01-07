@@ -6,7 +6,7 @@ namespace FCG.Games.Domain.Interfaces.Services;
 
 public interface IOrderService
 {
-    Task<Result<OrderResponse>> CreateAsync(CreateOrderRequest request);
+    Task<Result<OrderResponse>> CreateAsync(CreateOrderRequest request, CancellationToken ct);
     Task<Result<List<OrderResponse>>> ListAsync(CancellationToken ct);
     Task<Result<OrderResponse?>> GetByIdAsync(Guid id);
     Task<Result<List<OrderResponse>>> GetByUserIdAsync(Guid userId);

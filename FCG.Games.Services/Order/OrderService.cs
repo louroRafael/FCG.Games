@@ -4,14 +4,15 @@ using FCG.Games.Domain.DTOs.Responses;
 using FCG.Games.Domain.Entities;
 using FCG.Games.Domain.Enums;
 using FCG.Games.Domain.Errors;
+using FCG.Games.Domain.Interfaces.Common;
 using FCG.Games.Domain.Interfaces.Repositories;
 using FCG.Games.Domain.Interfaces.Services;
 
 namespace FCG.Games.Services.Order;
 
-public class OrderService(IOrderRepository repository, IGameRepository gameRepository) : IOrderService
+public class OrderService(IOrderRepository repository, IGameRepository gameRepository, IOrderEventPublisher eventPublisher) : IOrderService
 {
-    public async Task<Result<OrderResponse>> CreateAsync(CreateOrderRequest request)
+    public async Task<Result<OrderResponse>> CreateAsync(CreateOrderRequest request, CancellationToken ct)
     {
         decimal totalAmount = 0;
 
@@ -30,6 +31,8 @@ public class OrderService(IOrderRepository repository, IGameRepository gameRepos
         var order = new OrderEntity(request.UserId, request.GameIds, totalAmount, request.PaymentMethod);
 
         await repository.AddAsync(order);
+
+        await eventPublisher.PublishOrderCreatedAsync(new OrderCreatedEventRequest(order.Id, totalAmount, request.PaymentMethod), ct);
 
         Enum.TryParse<PaymentMethod>(order.PaymentMethod, true, out var paymentMethod);
         var orderItems = order.Items.Select(x => new OrderItemResponse(x.Id, x.GameId, x.OrderId)).ToList();

@@ -7,6 +7,7 @@ using FCG.Games.Domain.Validators;
 using FCG.Games.Infra.Contexts;
 using FCG.Games.Infra.Logging;
 using FCG.Games.Infra.Middleware;
+using FCG.Games.Infra.Publishers;
 using FCG.Games.Infra.Repository;
 using FCG.Games.Services.Game;
 using FCG.Games.Services.Order;
@@ -162,6 +163,9 @@ namespace FCG.Games.API.Extensions
             builder.Services.AddScoped<IGameService, GameService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPromotionService, PromotionService>();
+
+            // Publishers
+            builder.Services.AddSingleton<IOrderEventPublisher, OrderEventPublisher>();
 
             // Observability
             builder.Services.AddScoped<ICorrelationIdGenerator, CorrelationIdGenerator>();

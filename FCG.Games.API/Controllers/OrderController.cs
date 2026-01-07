@@ -14,9 +14,9 @@ public class OrderController(IOrderService service) : ControllerBase
 {
     [HttpPost]
     [ServiceFilter(typeof(ValidationFilter<CreateOrderRequest>))]
-    public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateOrderRequest request, CancellationToken ct)
     {
-        var orderCreated = await service.CreateAsync(request);
+        var orderCreated = await service.CreateAsync(request, ct);
         return orderCreated.ToActionResult();
     }
 
