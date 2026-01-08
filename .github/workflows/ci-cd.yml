@@ -93,6 +93,6 @@ jobs:
       - name: Redeploy Container App
         run: |
           az containerapp update \
-          --name fcg-aca \
+          --name fcg-games-aca \
           --resource-group FCG \
-          --image ${{ secrets.DOCKERHUB_USERNAME }}/fcg-api:${{ env.TAG }}
+          --image ${{ secrets.DOCKERHUB_USERNAME }}/fcg-games-api:${{ env.TAG }}
