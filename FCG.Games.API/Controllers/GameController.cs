@@ -15,9 +15,9 @@ public class GameController(IGameService service) : ControllerBase
     [HttpPost]
     [Authorize(Roles = "Admin")]
     [ServiceFilter(typeof(ValidationFilter<CreateGameRequest>))]
-    public async Task<IActionResult> Create([FromBody] CreateGameRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateGameRequest request, CancellationToken ct)
     {
-        var gameCreated = await service.CreateAsync(request);
+        var gameCreated = await service.CreateAsync(request, ct);
         return gameCreated.ToActionResult();
     }
 
@@ -26,5 +26,26 @@ public class GameController(IGameService service) : ControllerBase
     {
         var games = await service.ListAsync();
         return games.ToActionResult();
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromBody] SearchGameRequest request, CancellationToken ct)
+    {
+        var games = await service.SearchAsync(request.searchText, request.Genre.ToString(), request.Platform.ToString(), ct);
+        return games.ToActionResult();
+    }
+
+    [HttpGet("{id}/recommendations")]
+    public async Task<IActionResult> Recommendations(Guid id, CancellationToken ct)
+    {
+        var games = await service.RecommendationAsync(id, ct);
+        return games.ToActionResult();
+    }
+
+    [HttpGet("metrics")]
+    public async Task<IActionResult> Metrics(CancellationToken ct)
+    {
+        var metrics = await service.MetricsAsync(ct);
+        return metrics.ToActionResult();
     }
 }

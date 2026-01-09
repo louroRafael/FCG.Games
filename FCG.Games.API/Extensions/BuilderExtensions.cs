@@ -1,4 +1,6 @@
-﻿using FCG.Games.API.Filters;
+﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using FCG.Games.API.Filters;
 using FCG.Games.API.Middlewares;
 using FCG.Games.Domain.Interfaces.Common;
 using FCG.Games.Domain.Interfaces.Repositories;
@@ -44,6 +46,7 @@ namespace FCG.Games.API.Extensions
             builder.ConfigureDI();
             builder.ConfigureHealthCheck();
             builder.ConfigureValidators();
+            builder.ConfigureElasticSearch();
         }
 
         private static void UseJsonFileConfiguration(this WebApplicationBuilder builder)
@@ -158,6 +161,7 @@ namespace FCG.Games.API.Extensions
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
+            builder.Services.AddScoped<IElasticSearchRepository, ElasticSearchRepository>();
 
             // Services
             builder.Services.AddScoped<IGameService, GameService>();
@@ -189,6 +193,21 @@ namespace FCG.Games.API.Extensions
         private static void ConfigureValidators(this WebApplicationBuilder builder)
         {
             builder.Services.AddValidatorsFromAssembly(typeof(CreateGameRequestValidator).Assembly);
+        }
+
+        private static void ConfigureElasticSearch(this WebApplicationBuilder builder)
+        {
+            var configuration = builder.Configuration.GetSection("Elasticsearch");
+            var url = configuration["Url"] ?? throw new InvalidOperationException("ElasticSearch Url not configured");
+            var apiKey = configuration["ApiKey"] ?? throw new InvalidOperationException("ElasticSearch ApiKey not configured");
+
+            builder.Services.AddSingleton(sp =>
+            {
+                var settings = new ElasticsearchClientSettings(new Uri(url))
+                    .Authentication(new ApiKey(apiKey));
+
+                return new ElasticsearchClient(settings);
+            });
         }
     }
 }
