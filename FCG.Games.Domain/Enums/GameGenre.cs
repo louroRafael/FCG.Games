@@ -6,5 +6,8 @@ public enum GameGenre
     Action,
     Adventure,
     FPS,
-    Sports
+    Sports,
+    Racing,
+    Simulation,
+    Strategy
 }
