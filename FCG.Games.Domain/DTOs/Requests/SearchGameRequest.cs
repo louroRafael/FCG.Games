@@ -2,4 +2,4 @@
 
 namespace FCG.Games.Domain.DTOs.Requests;
 
-public record SearchGameRequest(string searchText, GameGenre Genre, GamePlatform Platform);
+public record SearchGameRequest(string? searchText, GameGenre? Genre, GamePlatform? Platform);

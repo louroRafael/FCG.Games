@@ -47,7 +47,7 @@ public class ElasticSearchRepository(ElasticsearchClient client) : IElasticSearc
                 {
                     b.Filter(f => f
                         .Term(t => t
-                            .Field(p => p.Genre.Suffix("keyword"))
+                            .Field(p => p.Genre)
                             .Value(genre)
                         )
                     );
@@ -57,7 +57,7 @@ public class ElasticSearchRepository(ElasticsearchClient client) : IElasticSearc
                 {
                     b.Filter(f => f
                         .Term(t => t
-                            .Field(p => p.Platform.Suffix("keyword"))
+                            .Field(p => p.Platform)
                             .Value(platform)
                         )
                     );
@@ -83,13 +83,13 @@ public class ElasticSearchRepository(ElasticsearchClient client) : IElasticSearc
             .Aggregations(aggs => aggs
                 .Add("games_by_genre", a => a
                     .Terms(t => t
-                        .Field(f => f.Genre.Suffix("keyword"))
+                        .Field(f => f.Genre)
                         .Size(50)
                     )
                 )
                 .Add("games_by_platform", a => a
                     .Terms(t => t
-                        .Field(f => f.Platform.Suffix("keyword"))
+                        .Field(f => f.Platform)
                         .Size(50)
                     )
                 )
@@ -142,17 +142,17 @@ public class ElasticSearchRepository(ElasticsearchClient client) : IElasticSearc
                 .Bool(b => b
                     .Must(
                         m => m.Term(t => t
-                            .Field(f => f.Genre.Suffix("keyword"))
+                            .Field(f => f.Genre)
                             .Value(genre)
                         ),
                         m => m.Term(t => t
-                            .Field(f => f.Platform.Suffix("keyword"))
+                            .Field(f => f.Platform)
                             .Value(platform)
                         )
                     )
                     .MustNot(
                         mn => mn.Term(t => t
-                            .Field(f => f.Id.Suffix("keyword"))
+                            .Field(f => f.Id)
                             .Value(gameId)
                         )
                     )

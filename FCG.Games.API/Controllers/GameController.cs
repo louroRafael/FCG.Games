@@ -1,6 +1,7 @@
 ﻿using FCG.Games.API.Extensions;
 using FCG.Games.API.Filters;
 using FCG.Games.Domain.DTOs.Requests;
+using FCG.Games.Domain.Enums;
 using FCG.Games.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,12 @@ public class GameController(IGameService service) : ControllerBase
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> Search([FromBody] SearchGameRequest request, CancellationToken ct)
+    public async Task<IActionResult> Search(
+        [FromQuery] string? query,
+        [FromQuery] GameGenre? genre,
+        [FromQuery] GamePlatform? platform, CancellationToken ct)
     {
-        var games = await service.SearchAsync(request.searchText, request.Genre.ToString(), request.Platform.ToString(), ct);
+        var games = await service.SearchAsync(query, genre.ToString(), platform.ToString(), ct);
         return games.ToActionResult();
     }
 
